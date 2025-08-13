@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpine Casino</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1a1d29;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #213743;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00e701;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .logo:hover {
+            text-shadow: 0 0 20px #00e701, 0 0 30px #00e701;
+            transform: scale(1.05);
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00e701, #00c401);
+            transition: width 0.3s ease;
+        }
+
+        .logo:hover::before {
+            width: 100%;
+        }
+
+        .nav-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .balance-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .balance {
+            background: #2f4553;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .deposit-btn, .login-btn {
+            background: #00e701;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .deposit-btn:hover, .login-btn:hover {
+            background: #00c401;
+        }
+
+        .register-btn {
+            background: transparent;
+            color: #00e701;
+            border: 2px solid #00e701;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .register-btn:hover {
+            background: #00e701;
+            color: #000;
+        }
+
+        .main-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .game-section {
+            flex: 2;
+            background: #213743;
+            border-radius: 8px;
+            padding: 30px;
+        }
+
+        .game-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .game-tab {
+            background: #2f4553;
+            color: white;
+            border: 2px solid #4a5568;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .game-tab.active {
+            background: #00e701;
+            color: #000;
+            border-color: #00e701;
+        }
+
+        .game-tab:hover {
+            border-color: #00e701;
+            background: #354a5a;
+        }
+
+        .game-tab.active:hover {
+            background: #00c401;
+        }
+
+        .game-content {
+            display: none;
+        }
+
+        .game-content.active {
+            display: block;
+        }
+
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .wallet-card, .codes-card, .transactions-card {
+            background: #213743;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #00e701;
+        }
+
+        .game-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .slot-machine {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .slot {
+            width: 100px;
+            height: 100px;
+            background: #2f4553;
+            border: 2px solid #4a5568;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .slot.spinning {
+            animation: spin 0.1s linear infinite;
+            border-color: #00e701;
+        }
+
+        @keyframes spin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .bet-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .bet-input {
+            background: #2f4553;
+            border: 2px solid #4a5568;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 16px;
+            width: 120px;
+            text-align: center;
+        }
+
+        .bet-input:focus {
+            outline: none;
+            border-color: #00e701;
+        }
+
+        .bet-btn {
+            background: #2f4553;
+            color: white;
+            border: 2px solid #4a5568;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .bet-btn:hover {
+            border-color: #00e701;
+            background: #354a5a;
+        }
+
+        .spin-btn, .snake-start-btn {
+            background: #00e701;
+            color: #000;
+            border: none;
+            padding: 15px 50px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .spin-btn:hover:not(:disabled), .snake-start-btn:hover:not(:disabled) {
+            background: #00c401;
+        }
+
+        .spin-btn:disabled, .snake-start-btn:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+        }
+
+        .message {
+            text-align: center;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .message.win {
+            background: rgba(0, 231, 1, 0.1);
+            border: 1px solid #00e701;
+            color: #00e701;
+        }
+
+        .message.lose {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+
+        .message.neutral {
+            background: rgba(156, 163, 175, 0.1);
+            border: 1px solid #6b7280;
+            color: #9ca3af;
+        }
+
+        /* Snake Game Styles */
+        .snake-container {
+            text-align: center;
+        }
+
+        .snake-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: #2f4553;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .snake-info div {
+            text-align: center;
+        }
+
+        .snake-info .label {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .snake-info .value {
+            font-weight: bold;
+            font-size: 18px;
+            color: #00e701;
+        }
+
+        .snake-game {
+            width: 400px;
+            height: 400px;
+            background: #2f4553;
+            border: 3px solid #4a5568;
+            border-radius: 8px;
+            margin: 0 auto 20px;
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            grid-template-rows: repeat(20, 1fr);
+        }
+
+        .snake-cell {
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .snake-head {
+            background: #00e701;
+            border-radius: 2px;
+        }
+
+        .snake-body {
+            background: #00c401;
+            border-radius: 2px;
+        }
+
+        .snake-food {
+            background: #ef4444;
+            border-radius: 50%;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        .snake-obstacle {
+            background: #8b5cf6;
+            border-radius: 4px;
+            animation: obstacleSpawn 0.5s ease-out;
+        }
+
+        @keyframes glow {
+            from { opacity: 0.7; }
+            to { opacity: 1; }
+        }
+
+        @keyframes obstacleSpawn {
+            0% { 
+                transform: scale(0) rotate(0deg);
+                background: #ef4444;
+            }
+            50% { 
+                transform: scale(1.5) rotate(180deg);
+                background: #f59e0b;
+            }
+            100% { 
+                transform: scale(1) rotate(360deg);
+                background: #8b5cf6;
+            }
+        }
+
+        .snake-controls {
+            margin-bottom: 20px;
+        }
+
+        .controls-grid {
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            background: #2f4553;
+            border: 2px solid #4a5568;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            border-color: #00e701;
+            background: #354a5a;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            background: #2f4553;
+            border: 2px solid #4a5568;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #00e701;
+        }
+
+        .action-btn {
+            background: #00e701;
+            color: #000;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .action-btn:hover {
+            background: #00c401;
+        }
+
+        .action-btn.secondary {
+            background: #2f4553;
+            color: white;
+            border: 2px solid #4a5568;
+        }
+
+        .action-btn.secondary:hover {
+            border-color: #00e701;
+            background: #354a5a;
+        }
+
+        .transaction-item {
+            background: #2f4553;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .transaction-type {
+            font-weight: 600;
+            color: #00e701;
+        }
+
+        .transaction-amount {
+            float: right;
+            font-weight: 600;
+        }
+
+        .transaction-amount.positive {
+            color: #00e701;
+        }
+
+        .transaction-amount.negative {
+            color: #ef4444;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #213743;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #00e701;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .payment-method {
+            background: #2f4553;
+            border: 2px solid #4a5568;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .payment-method:hover, .payment-method.active {
+            border-color: #00e701;
+            background: #354a5a;
+        }
+
+        .code-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .code-input input {
+            flex: 1;
+        }
+
+        /* Homepage Styles */
+        .homepage {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .homepage.active {
+            display: block;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00e701, #00c401, #009e01);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #9ca3af;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .hero-btn {
+            background: #00e701;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hero-btn:hover {
+            background: #00c401;
+            transform: translateY(-2px);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: #213743;
+            padding: 30px 20px;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #00e701;
+        }
+
+        .feature-description {
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        /* Auth Modal Styles */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: #2f4553;
+            border-radius: 6px;
+            padding: 4px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            background: transparent;
+            color: #9ca3af;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .auth-tab.active {
+            background: #00e701;
+            color: #000;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-section {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .snake-game {
+                width: 300px;
+                height: 300px;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo" onclick="showHomepage()">ALPINE</div>
+        <div class="nav-section">
+            <div class="balance-container">
+                <div class="balance">Saldo: <span id="headerBalance">10.00</span>€</div>
+                <button class="deposit-btn" onclick="openModal('depositModal')">Einzahlen</button>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="login-btn" onclick="openModal('authModal')">Login</button>
+                <button class="register-btn" onclick="openModal('authModal')">Register</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Homepage -->
+    <div class="homepage active" id="homepage">
+        <div class="container">
+            <h1 class="hero-title">Willkommen im Alpine Casino</h1>
+            <p class="hero-subtitle">
+                Erlebe spannende Casino-Spiele mit fairen Gewinnchancen und sicheren Transaktionen. 
+                Starte jetzt mit deinem kostenlosen Startguthaben!
+            </p>
+            
+            <div class="hero-buttons">
+                <button class="hero-btn" onclick="startGaming()">Jetzt Spielen</button>
+                <button class="hero-btn" onclick="openModal('authModal')">Kostenloses Konto</button>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 class="feature-title">Slot Machine</h3>
+                    <p class="feature-description">
+                        Klassische Spielautomaten mit verschiedenen Symbolen und attraktiven Gewinnmultiplikatoren.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">Snake Challenge</h3>
+                    <p class="feature-description">
+                        Ein moderner Twist auf das klassische Snake-Spiel mit Gewinnmöglichkeiten.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">Sichere Zahlungen</h3>
+                    <p class="feature-description">
+                        Unterstützung für Kreditkarten, PayPal, Kryptowährungen und Banküberweisungen.
+                    </p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">Bonus Codes</h3>
+                    <p class="feature-description">
+                        Regelmäßige Bonus-Codes für zusätzliches Guthaben und bessere Gewinnchancen.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container" id="gameArea" style="display: none;">
+        <div class="game-section">
+            <div class="game-tabs">
+                <button class="game-tab active" onclick="switchGame('slots')">Slots</button>
+                <button class="game-tab" onclick="switchGame('snake')">Snake</button>
+            </div>
+
+            <!-- Slots Game -->
+            <div class="game-content active" id="slotsGame">
+                <h1 class="game-title">Slot Machine</h1>
+                
+                <div class="slot-machine">
+                    <div class="slot" id="slot1">🍒</div>
+                    <div class="slot" id="slot2">🍋</div>
+                    <div class="slot" id="slot3">🍊</div>
+                </div>
+                
+                <div class="bet-controls">
+                    <button class="bet-btn" onclick="halveBet()">1/2</button>
+                    <input type="number" class="bet-input" id="betAmount" value="0.50" min="0.10" step="0.10">
+                    <button class="bet-btn" onclick="doubleBet()">2x</button>
+                    <button class="bet-btn" onclick="maxBet()">Max</button>
+                </div>
+                
+                <button class="spin-btn" id="spinBtn" onclick="spin()">SPIN</button>
+                
+                <div class="message neutral" id="gameMessage">
+                    Setze deinen Einsatz und drücke SPIN!
+                </div>
+            </div>
+
+            <!-- Snake Game -->
+            <div class="game-content" id="snakeGame">
+                <h1 class="game-title">Snake Challenge</h1>
+                
+                <div class="snake-info">
+                    <div>
+                        <div class="label">Einsatz</div>
+                        <div class="value">5.00€</div>
+                    </div>
+                    <div>
+                        <div class="label">Ziel</div>
+                        <div class="value">5 Punkte</div>
+                    </div>
+                    <div>
+                        <div class="label">Gewinn</div>
+                        <div class="value">15.00€</div>
+                    </div>
+                    <div>
+                        <div class="label">Punkte</div>
+                        <div class="value" id="snakeScore">0</div>
+                    </div>
+                </div>
+
+                <div class="snake-game" id="snakeCanvas"></div>
+
+                <div class="snake-controls">
+                    <button class="snake-start-btn" id="snakeStartBtn" onclick="startSnakeGame()">SPIEL STARTEN (5€)</button>
+                    
+                    <div class="controls-grid">
+                        <div class="control-row">
+                            <button class="control-btn" onclick="changeDirection('up')">↑</button>
+                        </div>
+                        <div class="control-row">
+                            <button class="control-btn" onclick="changeDirection('left')">←</button>
+                            <button class="control-btn" onclick="changeDirection('down')">↓</button>
+                            <button class="control-btn" onclick="changeDirection('right')">→</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message neutral" id="snakeMessage">
+                    Sammle 5 rote Punkte um zu gewinnen! Vermeide die lila Hindernisse!
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="wallet-card">
+                <h3 class="card-title">Wallet</h3>
+                <div class="input-group">
+                    <label>Aktueller Saldo</label>
+                    <div style="background: #2f4553; padding: 12px; border-radius: 6px; text-align: center; font-weight: bold; font-size: 18px;">
+                        <span id="balance">10.00</span>€
+                    </div>
+                </div>
+                <button class="action-btn" onclick="openModal('depositModal')">Einzahlen</button>
+                <button class="action-btn secondary" onclick="openModal('withdrawModal')">Auszahlen</button>
+            </div>
+
+            <div class="codes-card">
+                <h3 class="card-title">Bonus Codes</h3>
+                <div class="code-input">
+                    <input type="text" id="bonusCode" placeholder="Code eingeben..." style="background: #2f4553; border: 2px solid #4a5568; color: white; padding: 12px; border-radius: 6px;">
+                    <button class="action-btn" onclick="redeemCode()" style="width: auto; padding: 12px 20px;">Einlösen</button>
+                </div>
+                <div style="margin-top: 10px; font-size: 12px; color: #9ca3af;">
+                    Verfügbare Codes: START5, LUCKY2, BONUS1
+                </div>
+            </div>
+
+            <div class="transactions-card">
+                <h3 class="card-title">Transaktionen</h3>
+                <div id="transactionHistory">
+                    <div class="transaction-item">
+                        <div class="transaction-type">Startguthaben</div>
+                        <div class="transaction-amount positive">+10.00€</div>
+                        <div style="clear: both; color: #9ca3af; font-size: 12px; margin-top: 5px;">Heute, 12:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal (Login/Register) -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('authModal')">&times;</button>
+            <h2 class="modal-title">Konto</h2>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Anmelden</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Registrieren</button>
+            </div>
+
+            <!-- Login Form -->
+            <div class="auth-form active" id="loginForm">
+                <div class="input-group">
+                    <label>E-Mail</label>
+                    <input type="email" id="loginEmail" placeholder="deine@email.de">
+                </div>
+                <div class="input-group">
+                    <label>Passwort</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••">
+                </div>
+                <button class="action-btn" onclick="processLogin()">Anmelden</button>
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="#" style="color: #00e701; text-decoration: none; font-size: 14px;">Passwort vergessen?</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div class="auth-form" id="registerForm">
+                <div class="input-group">
+                    <label>Benutzername</label>
+                    <input type="text" id="registerUsername" placeholder="MeinUsername">
+                </div>
+                <div class="input-group">
+                    <label>E-Mail</label>
+                    <input type="email" id="registerEmail" placeholder="deine@email.de">
+                </div>
+                <div class="input-group">
+                    <label>Passwort</label>
+                    <input type="password" id="registerPassword" placeholder="••••••••">
+                </div>
+                <div class="input-group">
+                    <label>Passwort bestätigen</label>
+                    <input type="password" id="registerPasswordConfirm" placeholder="••••••••">
+                </div>
+                <div style="margin: 15px 0; font-size: 12px; color: #9ca3af;">
+                    <input type="checkbox" id="termsAccept" style="width: auto; margin-right: 8px;">
+                    <label for="termsAccept">Ich akzeptiere die AGB und Datenschutzerklärung</label>
+                </div>
+                <button class="action-btn" onclick="processRegister()">Konto erstellen</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('depositModal')">&times;</button>
+            <h2 class="modal-title">Einzahlung</h2>
+            
+            <div class="input-group">
+                <label>Betrag</label>
+                <input type="number" id="depositAmount" placeholder="10.00" min="10" step="5">
+            </div>
+            
+            <div class="input-group">
+                <label>Zahlungsart</label>
+                <div class="payment-methods">
+                    <div class="payment-method active" data-method="card">
+                        💳<br>Karte
+                    </div>
+                    <div class="payment-method" data-method="paypal">
+                        💰<br>PayPal
+                    </div>
+                    <div class="payment-method" data-method="crypto">
+                        ₿<br>Crypto
+                    </div>
+                    <div class="payment-method" data-method="bank">
+                        🏦<br>Bank
+                    </div>
+                </div>
+            </div>
+            
+            <button class="action-btn" onclick="processDeposit()">Einzahlen</button>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('withdrawModal')">&times;</button>
+            <h2 class="modal-title">Auszahlung</h2>
+            
+            <div class="input-group">
+                <label>Betrag</label>
+                <input type="number" id="withdrawAmount" placeholder="10.00" min="10" step="5">
+            </div>
+            
+            <div class="input-group">
+                <label>Auszahlungsart</label>
+                <select id="withdrawMethod">
+                    <option value="bank">Banküberweisung</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="crypto">Kryptowährung</option>
+                </select>
+            </div>
+            
+            <button class="action-btn" onclick="processWithdraw()">Auszahlen</button>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            balance: 10.00,
+            isLoggedIn: false,
+            username: '',
+            transactions: [
+                { type: 'Startguthaben', amount: 10.00, timestamp: new Date() }
+            ]
+        };
+
+        // Slot Machine Variables
+        const symbols = ['🍒', '🍋', '🍊', '⭐', '💎', '🔔'];
+        let isSpinning = false;
+
+        // Snake Game Variables
+        let snakeGameState = {
+            isRunning: false,
+            snake: [],
+            food: null,
+            obstacles: [],
+            direction: { x: 1, y: 0 },
+            nextDirection: { x: 1, y: 0 },
+            score: 0,
+            gameInterval: null,
+            gridSize: 20
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBalance();
+            updateTransactionHistory();
+            
+            // Payment method selection
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.addEventListener('click', function() {
+                    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Keyboard controls for snake
+            document.addEventListener('keydown', function(e) {
+                if (!snakeGameState.isRunning) return;
+                
+                switch(e.key) {
+                    case 'ArrowUp':
+                    case 'w':
+                    case 'W':
+                        e.preventDefault();
+                        changeDirection('up');
+                        break;
+                    case 'ArrowDown':
+                    case 's':
+                    case 'S':
+                        e.preventDefault();
+                        changeDirection('down');
+                        break;
+                    case 'ArrowLeft':
+                    case 'a':
+                    case 'A':
+                        e.preventDefault();
+                        changeDirection('left');
+                        break;
+                    case 'ArrowRight':
+                    case 'd':
+                    case 'D':
+                        e.preventDefault();
+                        changeDirection('right');
+                        break;
+                }
+            });
+        });
+
+        // Navigation Functions
+        function showHomepage() {
+            document.getElementById('homepage').classList.add('active');
+            document.getElementById('gameArea').style.display = 'none';
+        }
+
+        function startGaming() {
+            document.getElementById('homepage').classList.remove('active');
+            document.getElementById('gameArea').style.display = 'flex';
+        }
+
+        function switchGame(game) {
+            // Update tabs
+            document.querySelectorAll('.game-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.game-content').forEach(content => content.classList.remove('active'));
+            
+            if (game === 'slots') {
+                document.getElementById('slotsGame').classList.add('active');
+            } else if (game === 'snake') {
+                document.getElementById('snakeGame').classList.add('active');
+                initSnakeGame();
+            }
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelector('.auth-tab:first-child').classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.querySelector('.auth-tab:last-child').classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+        }
+
+        // Balance Functions
+        function updateBalance() {
+            document.getElementById('balance').textContent = gameState.balance.toFixed(2);
+            document.getElementById('headerBalance').textContent = gameState.balance.toFixed(2);
+        }
+
+        function addTransaction(type, amount) {
+            gameState.transactions.unshift({
+                type: type,
+                amount: amount,
+                timestamp: new Date()
+            });
+            updateTransactionHistory();
+        }
+
+        function updateTransactionHistory() {
+            const history = document.getElementById('transactionHistory');
+            history.innerHTML = '';
+            
+            gameState.transactions.slice(0, 10).forEach(transaction => {
+                const item = document.createElement('div');
+                item.className = 'transaction-item';
+                
+                const isPositive = transaction.amount > 0;
+                const amountClass = isPositive ? 'positive' : 'negative';
+                const amountPrefix = isPositive ? '+' : '';
+                
+                item.innerHTML = `
+                    <div class="transaction-type">${transaction.type}</div>
+                    <div class="transaction-amount ${amountClass}">${amountPrefix}${Math.abs(transaction.amount).toFixed(2)}€</div>
+                    <div style="clear: both; color: #9ca3af; font-size: 12px; margin-top: 5px;">
+                        ${transaction.timestamp.toLocaleDateString('de-DE')}, ${transaction.timestamp.toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'})}
+                    </div>
+                `;
+                
+                history.appendChild(item);
+            });
+        }
+
+        // Slot Machine Functions
+        function halveBet() {
+            const betInput = document.getElementById('betAmount');
+            const currentBet = parseFloat(betInput.value);
+            const newBet = Math.max(0.10, currentBet / 2);
+            betInput.value = newBet.toFixed(2);
+        }
+
+        function doubleBet() {
+            const betInput = document.getElementById('betAmount');
+            const currentBet = parseFloat(betInput.value);
+            const newBet = Math.min(gameState.balance, currentBet * 2);
+            betInput.value = newBet.toFixed(2);
+        }
+
+        function maxBet() {
+            const betInput = document.getElementById('betAmount');
+            betInput.value = Math.min(gameState.balance, 50).toFixed(2);
+        }
+
+        function spin() {
+            if (isSpinning) return;
+            
+            const betAmount = parseFloat(document.getElementById('betAmount').value);
+            
+            if (betAmount > gameState.balance) {
+                showMessage('Nicht genügend Guthaben!', 'lose');
+                return;
+            }
+            
+            if (betAmount < 0.10) {
+                showMessage('Mindestens 0.10€ setzen!', 'lose');
+                return;
+            }
+            
+            isSpinning = true;
+            gameState.balance -= betAmount;
+            updateBalance();
+            
+            const spinBtn = document.getElementById('spinBtn');
+            spinBtn.disabled = true;
+            spinBtn.textContent = 'SPINNING...';
+            
+            // Add spinning animation
+            const slots = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')];
+            slots.forEach(slot => slot.classList.add('spinning'));
+            
+            // Spin animation
+            let spinCount = 0;
+            const spinInterval = setInterval(() => {
+                slots.forEach(slot => {
+                    slot.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                });
+                
+                spinCount++;
+                if (spinCount > 20) {
+                    clearInterval(spinInterval);
+                    finalizeSpin(slots, betAmount);
+                }
+            }, 100);
+        }
+
+        function finalizeSpin(slots, betAmount) {
+            // Final result
+            const results = slots.map(() => symbols[Math.floor(Math.random() * symbols.length)]);
+            
+            slots.forEach((slot, index) => {
+                slot.textContent = results[index];
+                slot.classList.remove('spinning');
+            });
+            
+            // Check for wins
+            const winnings = calculateWinnings(results, betAmount);
+            
+            if (winnings > 0) {
+                gameState.balance += winnings;
+                updateBalance();
+                showMessage(`GEWINN! +${winnings.toFixed(2)}€`, 'win');
+                addTransaction('Slot Gewinn', winnings);
+            } else {
+                showMessage('Kein Gewinn. Versuch es nochmal!', 'lose');
+                addTransaction('Slot Einsatz', -betAmount);
+            }
+            
+            // Reset button
+            setTimeout(() => {
+                isSpinning = false;
+                document.getElementById('spinBtn').disabled = false;
+                document.getElementById('spinBtn').textContent = 'SPIN';
+            }, 2000);
+        }
+
+        function calculateWinnings(results, betAmount) {
+            // Three of a kind
+            if (results[0] === results[1] && results[1] === results[2]) {
+                switch (results[0]) {
+                    case '💎': return betAmount * 50;
+                    case '⭐': return betAmount * 25;
+                    case '🔔': return betAmount * 15;
+                    case '🍒': return betAmount * 10;
+                    case '🍋': return betAmount * 8;
+                    case '🍊': return betAmount * 5;
+                }
+            }
+            
+            // Two of a kind
+            if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
+                if (results.includes('💎')) return betAmount * 3;
+                if (results.includes('⭐')) return betAmount * 2;
+                return betAmount * 1.5;
+            }
+            
+            return 0;
+        }
+
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('gameMessage');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+        }
+
+        // Snake Game Functions
+        function initSnakeGame() {
+            const canvas = document.getElementById('snakeCanvas');
+            canvas.innerHTML = '';
+            
+            // Create grid
+            for (let i = 0; i < 400; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'snake-cell';
+                canvas.appendChild(cell);
+            }
+            
+            resetSnakeGame();
+        }
+
+        function resetSnakeGame() {
+            snakeGameState.snake = [
+                { x: 10, y: 10 },
+                { x: 9, y: 10 },
+                { x: 8, y: 10 }
+            ];
+            snakeGameState.direction = { x: 1, y: 0 };
+            snakeGameState.nextDirection = { x: 1, y: 0 };
+            snakeGameState.score = 0;
+            snakeGameState.obstacles = [];
+            snakeGameState.food = generateFood();
+            
+            document.getElementById('snakeScore').textContent = snakeGameState.score;
+            updateSnakeDisplay();
+        }
+
+        function startSnakeGame() {
+            if (gameState.balance < 5) {
+                showSnakeMessage('Nicht genügend Guthaben! Mindestens 5€ erforderlich.', 'lose');
+                return;
+            }
+            
+            if (snakeGameState.isRunning) return;
+            
+            gameState.balance -= 5;
+            updateBalance();
+            addTransaction('Snake Einsatz', -5);
+            
+            snakeGameState.isRunning = true;
+            document.getElementById('snakeStartBtn').disabled = true;
+            document.getElementById('snakeStartBtn').textContent = 'SPIEL LÄUFT...';
+            
+            resetSnakeGame();
+            showSnakeMessage('Sammle 5 rote Punkte! Vermeide die lila Hindernisse!', 'neutral');
+            
+            snakeGameState.gameInterval = setInterval(updateSnakeGame, 200);
+        }
+
+        function updateSnakeGame() {
+            if (!snakeGameState.isRunning) return;
+            
+            // Update direction
+            snakeGameState.direction = { ...snakeGameState.nextDirection };
+            
+            // Move snake
+            const head = { ...snakeGameState.snake[0] };
+            head.x += snakeGameState.direction.x;
+            head.y += snakeGameState.direction.y;
+            
+            // Check wall collision
+            if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20) {
+                endSnakeGame(false);
+                return;
+            }
+            
+            // Check self collision
+            if (snakeGameState.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                endSnakeGame(false);
+                return;
+            }
+            
+            // Check obstacle collision
+            if (snakeGameState.obstacles.some(obstacle => obstacle.x === head.x && obstacle.y === head.y)) {
+                endSnakeGame(false);
+                return;
+            }
+            
+            snakeGameState.snake.unshift(head);
+            
+            // Check food collision
+            if (head.x === snakeGameState.food.x && head.y === snakeGameState.food.y) {
+                snakeGameState.score++;
+                document.getElementById('snakeScore').textContent = snakeGameState.score;
+                
+                // Add obstacle every 2 points
+                if (snakeGameState.score % 2 === 0) {
+                    addRandomObstacle();
+                }
+                
+                if (snakeGameState.score >= 5) {
+                    endSnakeGame(true);
+                    return;
+                }
+                
+                snakeGameState.food = generateFood();
+            } else {
+                snakeGameState.snake.pop();
+            }
+            
+            updateSnakeDisplay();
+        }
+
+        function generateFood() {
+            let food;
+            do {
+                food = {
+                    x: Math.floor(Math.random() * 20),
+                    y: Math.floor(Math.random() * 20)
+                };
+            } while (
+                snakeGameState.snake.some(segment => segment.x === food.x && segment.y === food.y) ||
+                snakeGameState.obstacles.some(obstacle => obstacle.x === food.x && obstacle.y === food.y)
+            );
+            return food;
+        }
+
+        function addRandomObstacle() {
+            let obstacle;
+            do {
+                obstacle = {
+                    x: Math.floor(Math.random() * 20),
+                    y: Math.floor(Math.random() * 20)
+                };
+            } while (
+                snakeGameState.snake.some(segment => segment.x === obstacle.x && segment.y === obstacle.y) ||
+                snakeGameState.obstacles.some(obs => obs.x === obstacle.x && obs.y === obstacle.y) ||
+                (obstacle.x === snakeGameState.food.x && obstacle.y === snakeGameState.food.y)
+            );
+            
+            snakeGameState.obstacles.push(obstacle);
+        }
+
+        function updateSnakeDisplay() {
+            const cells = document.querySelectorAll('#snakeCanvas .snake-cell');
+            
+            // Clear all cells
+            cells.forEach(cell => {
+                cell.className = 'snake-cell';
+            });
+            
+            // Draw snake
+            snakeGameState.snake.forEach((segment, index) => {
+                const cellIndex = segment.y * 20 + segment.x;
+                if (cellIndex >= 0 && cellIndex < cells.length) {
+                    cells[cellIndex].classList.add(index === 0 ? 'snake-head' : 'snake-body');
+                }
+            });
+            
+            // Draw food
+            if (snakeGameState.food) {
+                const foodIndex = snakeGameState.food.y * 20 + snakeGameState.food.x;
+                if (foodIndex >= 0 && foodIndex < cells.length) {
+                    cells[foodIndex].classList.add('snake-food');
+                }
+            }
+            
+            // Draw obstacles
+            snakeGameState.obstacles.forEach(obstacle => {
+                const obstacleIndex = obstacle.y * 20 + obstacle.x;
+                if (obstacleIndex >= 0 && obstacleIndex < cells.length) {
+                    cells[obstacleIndex].classList.add('snake-obstacle');
+                }
+            });
+        }
+
+        function changeDirection(direction) {
+            if (!snakeGameState.isRunning) return;
+            
+            const currentDir = snakeGameState.direction;
+            
+            switch (direction) {
+                case 'up':
+                    if (currentDir.y !== 1) snakeGameState.nextDirection = { x: 0, y: -1 };
+                    break;
+                case 'down':
+                    if (currentDir.y !== -1) snakeGameState.nextDirection = { x: 0, y: 1 };
+                    break;
+                case 'left':
+                    if (currentDir.x !== 1) snakeGameState.nextDirection = { x: -1, y: 0 };
+                    break;
+                case 'right':
+                    if (currentDir.x !== -1) snakeGameState.nextDirection = { x: 1, y: 0 };
+                    break;
+            }
+        }
+
+        function endSnakeGame(won) {
+            snakeGameState.isRunning = false;
+            clearInterval(snakeGameState.gameInterval);
+            
+            document.getElementById('snakeStartBtn').disabled = false;
+            document.getElementById('snakeStartBtn').textContent = 'SPIEL STARTEN (5€)';
+            
+            if (won) {
+                gameState.balance += 15;
+                updateBalance();
+                showSnakeMessage(`GEWONNEN! +15€ erhalten!`, 'win');
+                addTransaction('Snake Gewinn', 15);
+            } else {
+                showSnakeMessage(`Spiel verloren! Du hast ${snakeGameState.score} Punkte erreicht.`, 'lose');
+            }
+        }
+
+        function showSnakeMessage(text, type) {
+            const messageEl = document.getElementById('snakeMessage');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+        }
+
+        // Bonus Code Functions
+        function redeemCode() {
+            const code = document.getElementById('bonusCode').value.toUpperCase();
+            const validCodes = {
+                'START5': 5,
+                'LUCKY2': 2,
+                'BONUS1': 1
+            };
+            
+            if (validCodes[code]) {
+                gameState.balance += validCodes[code];
+                updateBalance();
+                addTransaction(`Bonus Code: ${code}`, validCodes[code]);
+                document.getElementById('bonusCode').value = '';
+                alert(`Code eingelöst! +${validCodes[code]}€ erhalten!`);
+            } else {
+                alert('Ungültiger Code!');
+            }
+        }
+
+        // Payment Functions
+        function processDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            
+            if (amount < 10) {
+                alert('Mindesteinzahlung: 10€');
+                return;
+            }
+            
+            gameState.balance += amount;
+            updateBalance();
+            addTransaction('Einzahlung', amount);
+            closeModal('depositModal');
+            alert(`Erfolgreich ${amount}€ eingezahlt!`);
+        }
+
+        function processWithdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            
+            if (amount > gameState.balance) {
+                alert('Nicht genügend Guthaben!');
+                return;
+            }
+            
+            if (amount < 10) {
+                alert('Mindestauszahlung: 10€');
+                return;
+            }
+            
+            gameState.balance -= amount;
+            updateBalance();
+            addTransaction('Auszahlung', -amount);
+            closeModal('withdrawModal');
+            alert(`Auszahlung von ${amount}€ wird bearbeitet!`);
+        }
+
+        // Auth Functions
+        function processLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                alert('Bitte alle Felder ausfüllen!');
+                return;
+            }
+            
+            // Simulate login
+            gameState.isLoggedIn = true;
+            gameState.username = email.split('@')[0];
+            closeModal('authModal');
+            alert('Erfolgreich angemeldet!');
+        }
+
+        function processRegister() {
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const passwordConfirm = document.getElementById('registerPasswordConfirm').value;
+            const termsAccept = document.getElementById('termsAccept').checked;
+            
+            if (!username || !email || !password || !passwordConfirm) {
+                alert('Bitte alle Felder ausfüllen!');
+                return;
+            }
+            
+            if (password !== passwordConfirm) {
+                alert('Passwörter stimmen nicht überein!');
+                return;
+            }
+            
+            if (!termsAccept) {
+                alert('Bitte akzeptiere die AGB!');
+                return;
+            }
+            
+            // Simulate registration
+            gameState.isLoggedIn = true;
+            gameState.username = username;
+            closeModal('authModal');
+            alert('Konto erfolgreich erstellt!');
+        }
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
